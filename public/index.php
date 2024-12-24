@@ -8,4 +8,28 @@ define('APP_PATH', $root . 'app' . DIRECTORY_SEPARATOR);
 define('FILES_PATH', $root . 'transaction_files' . DIRECTORY_SEPARATOR);
 define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
-/* TO-DO */
+require APP_PATH . 'helpers.php';
+require APP_PATH . '/App.php';
+
+$files = getTransactionFiles(FILES_PATH);
+
+$transactions = [];
+foreach ($files as $file) {
+    $transactions = array_merge($transactions, getTransactions($file, 'extractTransaction'));
+}
+$totals = calculateTotals($transactions);
+//print_r($transactions);
+
+require VIEWS_PATH . 'transactions.php';
+
+//function processTransactionFile($filePath): array {
+//    $array = [];
+//    if (($handle = fopen($filePath, "r")) !== false) {
+//        while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+//            if (!empty($data)) {
+//                $array[] = $data;}
+//        }
+//        fclose($handle);
+//    }
+//    return $array;
+//}
